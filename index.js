@@ -51,6 +51,14 @@ async function run() {
             result
         })
     })
+
+    app.get('/my-foods', async (req,res)=>{
+        const email = req.query.email
+        const result = await foodCollection.find({
+reviewer_email: email
+}).toArray()
+res.send(result)
+    })
     
 
 
