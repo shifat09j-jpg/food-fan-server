@@ -5,12 +5,13 @@ const cors = require("cors")
 
 const app = express()
 const { MongoClient, ServerApiVersion } = require('mongodb');
+require("dotenv").config()
 const port = 3000
 
 app.use(cors())
 app.use(express.json())
 
-const uri = "mongodb+srv://food-db:KCaxcgdzOxQepxVD@cluster9.jsim6tq.mongodb.net/?appName=Cluster9";
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster9.jsim6tq.mongodb.net/?appName=Cluster9`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -23,7 +24,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
   
-    await client.connect();
+    // await client.connect();
     const db = client.db("food-db");
     const foodCollection = db.collection("foods")
 
@@ -90,7 +91,7 @@ res.send(result)
 
 
   
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
