@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require("cors")
-// const { ObjectId } = require("mongodb");
+
+ const { ObjectId } = require("mongodb");
 
 const app = express()
 const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -41,16 +42,40 @@ async function run() {
         })
     })
 
-    app.get('/foods/:id', async(req,res) =>{
-        const {id} = req.params
-        console.log(id)
-        // const objectId = new ObjectId (id)
-        const result = await foodCollection.findOne({_id: id})
-        res.send({
-            success:true,
-            result
-        })
-    })
+    // app.get('/foods/:id', async(req,res) =>{
+    //     const {id} = req.params
+    //     // console.log(id)
+    //     const objectId = new ObjectId (id)
+    //     const result = await foodCollection.findOne({_id: id})
+    //     res.send({
+    //         success:true,
+    //         result
+    //     })
+    // })
+
+
+   
+
+
+
+
+app.get("/foods/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // MongoDB ObjectId ধরে query
+    const food = await foodCollection.findOne({ _id: new ObjectId(id) });
+
+    res.send({
+      success: true,
+      result: food , // যদি না পাওয়া যায় null
+    });
+  } catch (err) {
+    // কোনো invalid id বা error হলে
+    res.send({ success: false, message: "Invalid ID or server error" });
+  }
+});
+
 
     app.get('/my-foods', async (req,res)=>{
         const email = req.query.email
@@ -60,6 +85,8 @@ reviewer_email: email
 res.send(result)
     })
     
+
+
 
 
   
